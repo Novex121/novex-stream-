@@ -3,11 +3,11 @@
     "categoryTitle": "Trending Movies",
     "videos": [
       {
-        "title": "Player Test - Big Buck Bunny",
+        "title": "Jujutsu Kaisen Episode 09",
         "rating": "ALL",
-        "thumbnail": "https://placehold.co/150x200/1a1d24/ffffff?text=Test+Video",
+        "thumbnail": "https://placehold.co/150x200/1a1d24/ffffff?text=Jujutsu+EP09",
         "type": "mp4",
-        "downloadFilename": "test.mp4",
+        "downloadFilename": "Jujutsu_EP09.mp4",
         "versions": {
           "720p": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
           "480p": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
