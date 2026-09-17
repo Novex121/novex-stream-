@@ -3,14 +3,13 @@
     "categoryTitle": "Trending Movies",
     "videos": [
       {
-        "title": "Demon Slayer Infinity Castle",
+        "title": "Jujutsu kaisen",
         "rating": "ALL",
-        "thumbnail": "https://via.placeholder.com/150x200",
+        "thumbnail": "https://raw.githubusercontent.com/Novex121/novex121.github.io/main/thumbnails/demon_slayer.jpg",
         "type": "mp4",
-        "downloadFilename": "demonslayer.mp4",
         "versions": {
-          "720p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/Jujutsu_Kaisen_English_480P_S03_EP09.mp4",
-          "480p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/Jujutsu_Kaisen_English_480P_S03_EP10.mp4"
+          "720p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/demon_slayer_720p.mp4",
+          "480p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/demon_slayer_480p.mp4"
         }
       }
     ]
