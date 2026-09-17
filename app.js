@@ -3,7 +3,30 @@ let currentVideoObj = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadContent();
+    setupPlayerEventListeners();
 });
+
+function setupPlayerEventListeners() {
+    const player = document.getElementById('mp4Player');
+    if (!player) return;
+
+    // Save progress to LocalStorage every time playback updates
+    player.addEventListener('timeupdate', () => {
+        if (currentVideoObj && player.currentTime > 0) {
+            localStorage.setItem(`progress_${currentVideoObj.title}`, player.currentTime.toString());
+        }
+    });
+
+    // Handle stream decoding and 404 missing file errors gracefully inside UI
+    player.addEventListener('error', () => {
+        const errorContainer = document.getElementById('playerError');
+        const details = document.getElementById('playerErrorDetails');
+        if (errorContainer && details && player.src) {
+            details.textContent = `Unable to load resource: ${player.src}`;
+            errorContainer.style.display = 'flex';
+        }
+    });
+}
 
 async function loadContent() {
     const container = document.getElementById('categoryContainer');
@@ -93,8 +116,11 @@ function openPlayer(video) {
     const modal = document.getElementById('playerModal');
     const player = document.getElementById('mp4Player');
     const qualitySelect = document.getElementById('qualitySelect');
+    const errorContainer = document.getElementById('playerError');
 
     if (!modal || !player) return;
+
+    if (errorContainer) errorContainer.style.display = 'none';
 
     let streamUrl = '';
     if (video.versions) {
@@ -121,6 +147,15 @@ function openPlayer(video) {
     player.src = streamUrl;
     player.load();
 
+    // Resume saved playback position if existing
+    const savedTime = localStorage.getItem(`progress_${video.title}`);
+    if (savedTime) {
+        const timeVal = parseFloat(savedTime);
+        if (!isNaN(timeVal) && timeVal > 2) {
+            player.currentTime = timeVal;
+        }
+    }
+
     const playPromise = player.play();
     if (playPromise !== undefined) {
         playPromise.catch(() => {
@@ -132,6 +167,7 @@ function openPlayer(video) {
 function closePlayer() {
     const modal = document.getElementById('playerModal');
     const player = document.getElementById('mp4Player');
+    const errorContainer = document.getElementById('playerError');
 
     if (player) {
         player.pause();
@@ -139,9 +175,8 @@ function closePlayer() {
         player.load();
     }
 
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    if (modal) modal.style.display = 'none';
+    if (errorContainer) errorContainer.style.display = 'none';
 
     currentVideoObj = null;
 }
@@ -166,6 +201,32 @@ function changeVideoQuality() {
             player.play().catch(() => {});
         }
     }
+}
+
+function downloadCurrentVideo() {
+    if (!currentVideoObj) return;
+
+    const select = document.getElementById('qualitySelect');
+    const quality = select ? select.value : '720p';
+
+    let streamUrl = '';
+    if (currentVideoObj.versions) {
+        streamUrl = currentVideoObj.versions[quality] || currentVideoObj.versions['720p'] || currentVideoObj.versions['480p'];
+    } else {
+        streamUrl = currentVideoObj.url;
+    }
+
+    if (!streamUrl) {
+        alert("No download file found.");
+        return;
+    }
+
+    const a = document.createElement('a');
+    a.href = streamUrl;
+    a.download = `${currentVideoObj.title || 'video'}.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 function filterVideos() {
