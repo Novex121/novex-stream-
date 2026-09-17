@@ -7,40 +7,35 @@ function openPlayer(video) {
 
     const streamUrl = video.versions ? (video.versions['720p'] || video.versions['480p']) : (video.url || '');
     if (!streamUrl) {
-        alert("No video URL found for this selection.");
+        alert("No video URL available for this item.");
         return;
     }
 
-    // Reset previous errors
-    player.onerror = null;
+    // 1. Reset player state and clear child elements to prevent load conflicts
+    player.pause();
+    player.onerror = null; 
+    while (player.firstChild) {
+        player.removeChild(player.firstChild);
+    }
 
-    // Show modal first so video has visible layout dimensions
+    // 2. Display modal before loading media
     modal.style.display = 'flex';
     player.style.display = 'block';
 
-    // Set mobile inline play attributes
+    // 3. Set attributes for mobile inline playback
     player.setAttribute('playsinline', 'true');
     player.setAttribute('webkit-playsinline', 'true');
     player.controls = true;
 
-    // Update video source
+    // 4. Assign source directly
     player.src = streamUrl;
-    const innerSource = player.querySelector('source');
-    if (innerSource) innerSource.src = streamUrl;
-
     player.load();
 
-    // Attach error listener only after load is initialized
-    player.onerror = () => {
-        alert("Unable to stream video. Check network connection or cross-origin restrictions:\n" + streamUrl);
-    };
-
-    // Safely attempt play
+    // 5. Attempt playback (handle mobile browser autoplay restrictions gracefully)
     const playPromise = player.play();
     if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            // Autoplay blocked by mobile browser - user can press play manually
-            console.log("Autoplay blocked. Tap play button on controls.");
+        playPromise.catch(error => {
+            console.log("Autoplay held by browser. Press play manually.", error);
         });
     }
 }
