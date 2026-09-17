@@ -1,135 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NOVEX Stream</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Family-Safe Google AdSense Code Placeholder -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384237360541435"
-     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novex Stream</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #0d0f12; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 20px; }
+        header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 25px; }
+        h1 { font-size: 1.5rem; color: #ff4757; }
+        #searchInput { background: #1a1d24; border: 1px solid #333; color: #fff; padding: 10px 15px; border-radius: 6px; width: 100%; max-width: 300px; outline: none; }
+        .category-section { margin-bottom: 30px; }
+        .category-title { font-size: 1.2rem; margin-bottom: 15px; border-left: 4px solid #ff4757; padding-left: 10px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .video-card { background: #1a1d24; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s ease; border: 1px solid #2a2d34; }
+        .video-card:hover { transform: translateY(-4px); }
+        .thumbnail-container { position: relative; width: 100%; height: 200px; background: #111; }
+        .thumbnail-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-info { padding: 10px; }
+        .card-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-rating { font-size: 0.7rem; background: #ff4757; color: #fff; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+
+        /* Player Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: #14171d; width: 100%; max-width: 850px; border-radius: 10px; overflow: hidden; border: 1px solid #2e323b; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #1a1d24; }
+        .quality-select { background: #2a2d34; color: #fff; border: 1px solid #444; padding: 6px 10px; border-radius: 4px; outline: none; }
+        .close-btn { background: #ff4757; color: #fff; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .video-wrapper { position: relative; width: 100%; background: #000; display: flex; justify-content: center; align-items: center; }
+        video { width: 100%; max-height: 70vh; display: block; background: #000; }
+    </style>
 </head>
 <body>
 
-  <!-- Top App Navigation -->
-  <header>
-    <div class="logo">NOVEX</div>
-    
-    <!-- Controls Toolbar -->
-    <div class="header-controls">
-      <button class="icon-btn" onclick="toggleDataSaver()" id="dataSaverBtn">⚡ Data Normal</button>
-      <button class="icon-btn" onclick="openParentalModal()">🔒 Parents</button>
-      <span id="premiumBadge" class="premium-badge" onclick="togglePremium()">⭐ Premium</span>
-    </div>
-  </header>
+    <header>
+        <h1>Novex Stream</h1>
+        <input type="text" id="searchInput" placeholder="Search title..." oninput="filterVideos()">
+    </header>
 
-  <!-- Live Search Bar -->
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="🔍 Search cartoons, movies, shows..." onkeyup="filterVideos()">
-  </div>
+    <main id="categoryContainer">
+        <!-- Videos render dynamically -->
+    </main>
 
-  <!-- Categories Quick Navigation Filter Bar -->
-  <div class="category-filter-bar" id="categoryFilterBar">
-    <button class="cat-pill active" onclick="filterByCategory('All')">All</button>
-    <button class="cat-pill" onclick="filterByCategory('Cartoons')">Cartoons</button>
-    <button class="cat-pill" onclick="filterByCategory('Movies')">Movies</button>
-    <button class="cat-pill" onclick="filterByCategory('Kids Shows')">Kids Shows</button>
-  </div>
-
-  <!-- Top Banner Ad (Hidden if Premium is Active) -->
-  <div class="ad-container" id="topAd">
-    <p class="ad-label">Advertisement (Family Safe)</p>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-0000000000000000"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- Featured Hero Banner -->
-  <section class="hero" id="heroSection">
-    <div class="hero-card">
-      <span class="badge">Featured</span>
-      <h1>PAW Patrol</h1>
-      <p>Adventure never stops!</p>
-      <div class="hero-btns">
-        <button onclick="playFeatured()">▶ Watch Now</button>
-        <button class="download-btn" onclick="triggerDownload('https://www.w3schools.com/html/mov_bbb.mp4', 'PAW_Patrol.mp4')">📥 Download (Offline)</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Dynamic Content Container -->
-  <main id="categoryContainer"></main>
-
-  <!-- Middle Banner Ad (Hidden if Premium is Active) -->
-  <div class="ad-container" id="bottomAd">
-    <p class="ad-label">Advertisement (Family Safe)</p>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-0000000000000000"
-         data-ad-slot="0987654321"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- Parental Controls Modal -->
-  <div id="parentalModal" class="modal">
-    <div class="modal-content">
-      <button class="close-modal-btn" onclick="closeParentalModal()">✕</button>
-      <h2>🔒 Parental Controls</h2>
-      <p>Manage content restrictions for children.</p>
-      
-      <div id="pinSection">
-        <div class="form-group">
-          <label>Enter 4-Digit Parent PIN:</label>
-          <input type="password" id="parentPinInput" maxlength="4" placeholder="1234">
+    <!-- Video Player Modal -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <select id="qualitySelect" class="quality-select" onchange="changeVideoQuality()">
+                    <option value="720p">720p</option>
+                    <option value="480p">480p</option>
+                </select>
+                <button class="close-btn" onclick="closePlayer()">✕ Close</button>
+            </div>
+            <div class="video-wrapper">
+                <video id="mp4Player" controls playsinline webkit-playsinline preload="metadata"></video>
+            </div>
         </div>
-        <button onclick="unlockParentSettings()">Unlock Settings</button>
-      </div>
-
-      <div id="parentSettingsSection" style="display: none;">
-        <div class="form-group">
-          <label for="ratingSelect">Content Restriction Level:</label>
-          <select id="ratingSelect" onchange="updateContentFilter()">
-            <option value="ALL">All Content (Kids & General)</option>
-            <option value="KIDS">Kids Only (Under 7)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Change 4-Digit PIN:</label>
-          <input type="password" id="newPinInput" maxlength="4" placeholder="Set New PIN">
-          <button onclick="saveNewPin()" style="margin-top: 8px;">Save New PIN</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Smart Video Player Overlay with Quality Selector -->
-  <div id="playerModal" class="player-modal">
-    <button class="close-btn" onclick="closePlayer()">✕ Close</button>
-    
-    <div class="player-toolbar">
-      <label for="qualitySelect">Quality Version:</label>
-      <select id="qualitySelect" onchange="changeVideoQuality()">
-        <option value="1080p">1080p (HD)</option>
-        <option value="720p" selected>720p (SD)</option>
-        <option value="480p">480p (Data Saver)</option>
-      </select>
     </div>
 
-    <video id="mp4Player" controls playsinline webkit-playsinline style="width: 100%; max-height: 70vh; display: none;"></video>
-      <source id="videoSource" src="" type="video/mp4">
-      Your browser does not support HTML5 video.
-    </video>
-
-    <iframe id="youtubePlayer" style="display: none; width: 90%; max-width: 800px; height: 450px; border: none; border-radius: 8px;" allowfullscreen></iframe>
-  </div>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
