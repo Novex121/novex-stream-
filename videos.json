@@ -3,14 +3,14 @@
     "categoryTitle": "Trending Movies",
     "videos": [
       {
-        "title": "Sample Action Movie",
+        "title": "Demon Slayer Infinity Castle",
         "rating": "ALL",
         "thumbnail": "https://via.placeholder.com/150x200",
         "type": "mp4",
-        "downloadFilename": "action-movie.mp4",
+        "downloadFilename": "demonslayer.mp4",
         "versions": {
-          "720p": "https://your-cloud-storage.com/action-720p.mp4",
-          "480p": "https://your-cloud-storage.com/action-480p.mp4"
+          "720p": "sha256:07f44ff76fcb561a2895395dffea371614d5f3c462b881e90667417238118fa4",
+          "480p": "sha256:07f44ff76fcb561a2895395dffea371614d5f3c462b881e90667417238118fa4"
         }
       }
     ]
