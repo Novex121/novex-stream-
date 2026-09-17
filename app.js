@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const repoOwner = 'novex121';
-    const repoName = 'novex-stream'; // Update if your repo name is different
+    const repoName = 'novex121.github.io'; // Change this to your exact repository name if different
     const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases`;
 
-    const videoContainer = document.getElementById('video-container'); // Adjust to match your HTML container ID
     const videoPlayer = document.querySelector('video');
 
     async function loadDynamicVideos() {
@@ -13,32 +12,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let allVideos = [];
 
-            releases.forEach(release => {
-                // Look through each asset attached to the release
-                release.assets.forEach(asset => {
-                    if (asset.name.endsWith('.mp4')) {
-                        // Clean up the filename for a nice display title
-                        let cleanTitle = asset.name
-                            .replace(/[-_]/g, ' ')
-                            .replace('.mp4', '');
+            // Check if the API returned an array of releases
+            if (Array.isArray(releases)) {
+                releases.forEach(release => {
+                    if (release.assets) {
+                        release.assets.forEach(asset => {
+                            if (asset.name.endsWith('.mp4')) {
+                                let cleanTitle = asset.name
+                                    .replace(/[-_]/g, ' ')
+                                    .replace('.mp4', '');
 
-                        allVideos.push({
-                            title: cleanTitle,
-                            url: asset.browser_download_url,
-                            thumbnail: "https://via.placeholder.com/150x200" // Default thumbnail or preview
+                                allVideos.push({
+                                    title: cleanTitle,
+                                    url: asset.browser_download_url
+                                });
+                            }
                         });
                     }
                 });
-            });
+            }
 
             console.log("Automatically loaded videos from GitHub Releases:", allVideos);
 
-            // If you have a default video player element, load the first one automatically
+            // Automatically load the first MP4 video into the player if available
             if (allVideos.length > 0 && videoPlayer) {
                 videoPlayer.src = allVideos[0].url;
             }
 
-            // Render them to your page UI if desired
             renderVideoList(allVideos);
 
         } catch (error) {
@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderVideoList(videos) {
-        // Optional: If you want to dynamically build UI cards for your list
         const listElement = document.getElementById('playlist');
         if (!listElement) return;
         
