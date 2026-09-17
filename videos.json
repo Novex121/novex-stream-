@@ -1,0 +1,18 @@
+[
+  {
+    "categoryTitle": "Trending Movies",
+    "videos": [
+      {
+        "title": "Sample Action Movie",
+        "rating": "ALL",
+        "thumbnail": "https://via.placeholder.com/150x200",
+        "type": "mp4",
+        "downloadFilename": "action-movie.mp4",
+        "versions": {
+          "720p": "https://your-cloud-storage.com/action-720p.mp4",
+          "480p": "https://your-cloud-storage.com/action-480p.mp4"
+        }
+      }
+    ]
+  }
+]

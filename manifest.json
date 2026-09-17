@@ -1,0 +1,15 @@
+{
+  "name": "NOVEX Stream",
+  "short_name": "NOVEX",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0e17",
+  "theme_color": "#0b0e17",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/512x512/3b82f6/ffffff?text=N",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
