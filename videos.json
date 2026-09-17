@@ -9,8 +9,8 @@
         "type": "mp4",
         "downloadFilename": "demonslayer.mp4",
         "versions": {
-          "720p": "sha256:07f44ff76fcb561a2895395dffea371614d5f3c462b881e90667417238118fa4",
-          "480p": "sha256:07f44ff76fcb561a2895395dffea371614d5f3c462b881e90667417238118fa4"
+          "720p": "https://github.com/Novex121/novex-stream-/releases/download/v1.0/Demon_Slayer_Kimetsu_no_Yaiba-_The_Movie_-_Infinity_Castle_.English._480P.mp4",
+          "480p": "https://github.com/Novex121/novex-stream-/releases/download/v1.0/Demon_Slayer_Kimetsu_no_Yaiba-_The_Movie_-_Infinity_Castle_.English._480P.mp4"
         }
       }
     ]
