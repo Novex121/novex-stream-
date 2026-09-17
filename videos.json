@@ -3,25 +3,14 @@
     "categoryTitle": "Trending Movies",
     "videos": [
       {
-        "title": "Jujutsu Kaisen Episode 9",
+        "title": "Player Test - Big Buck Bunny",
         "rating": "ALL",
-        "thumbnail": "https://placehold.co/150x200/1a1d24/ffffff?text=Jujutsu+EP09",
+        "thumbnail": "https://placehold.co/150x200/1a1d24/ffffff?text=Test+Video",
         "type": "mp4",
-        "downloadFilename": "Jujutsu_Kaisen_EP09.mp4",
+        "downloadFilename": "test.mp4",
         "versions": {
-          "720p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/Jujutsu_Kaisen._English._480P_S03_EP09.mp4",
-          "480p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/Jujutsu_Kaisen._English._480P_S03_EP09.mp4"
-        }
-      },
-      {
-        "title": "Jujutsu Kaisen Episode 10",
-        "rating": "ALL",
-        "thumbnail": "https://placehold.co/150x200/1a1d24/ffffff?text=Jujutsu+EP10",
-        "type": "mp4",
-        "downloadFilename": "Jujutsu_Kaisen_EP10.mp4",
-        "versions": {
-          "720p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/Jujutsu_Kaisen._English._480P_S03_EP10.mp4",
-          "480p": "https://github.com/Novex121/novex121.github.io/releases/download/v1.0/Jujutsu_Kaisen._English._480P_S03_EP10.mp4"
+          "720p": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          "480p": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         }
       }
     ]
