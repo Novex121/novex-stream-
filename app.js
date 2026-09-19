@@ -90,9 +90,11 @@ function openModal(movieId, movieTitle) {
     actionbar.style.display = 'flex';
     actionbar.style.gap = '15px';
     actionbar.style.marginTop = '15px';
+    actionbar.style.flexWrap = 'wrap';
+    actionbar.style.justifyContent = 'center';
 
     const downloadBtn = document.createElement('a');
-    downloadBtn.innerText = '📥 DOWNLOAD FILE (Archive.org)';
+    downloadBtn.innerText = '📥 FAST DIRECT DOWNLOAD';
     downloadBtn.href = `https://archive.org/search.php?query=${encodeURIComponent(movieTitle)}`;
     downloadBtn.target = '_blank';
     downloadBtn.style.padding = '12px 20px';
