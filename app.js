@@ -92,9 +92,9 @@ function openModal(movieId, movieTitle) {
     actionbar.style.marginTop = '15px';
 
     const downloadBtn = document.createElement('a');
-    downloadBtn.innerText = 'DOWNLOAD MOVIE';
-    // Updated to use vidsrc.to which resolves cleanly without DNS errors
-    downloadBtn.href = `https://vidsrc.to/embed/movie/${movieId}`;
+    downloadBtn.innerText = '📥 DOWNLOAD MOVIE';
+    // Using vidsrc.net mirror for stable download/stream access
+    downloadBtn.href = `https://vidsrc.net/embed/movie/${movieId}`;
     downloadBtn.target = '_blank';
     downloadBtn.style.padding = '12px 24px';
     downloadBtn.style.fontSize = '16px';
@@ -105,7 +105,7 @@ function openModal(movieId, movieTitle) {
     downloadBtn.style.fontWeight = 'bold';
 
     const closeBtn = document.createElement('button');
-    closeBtn.innerText = 'CLOSE PLAYER';
+    closeBtn.innerText = '✕ CLOSE PLAYER';
     closeBtn.style.padding = '12px 24px';
     closeBtn.style.fontSize = '16px';
     closeBtn.style.color = 'white';
