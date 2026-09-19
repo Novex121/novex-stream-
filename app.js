@@ -62,68 +62,59 @@ function openModal(movieId, movieTitle) {
     modal.style.left = '0';
     modal.style.width = '100vw';
     modal.style.height = '100vh';
-    modal.style.backgroundColor = 'rgba(0,0,0,0.98)';
+    modal.style.backgroundColor = 'black';
     modal.style.display = 'flex';
     modal.style.flexDirection = 'column';
     modal.style.justifyContent = 'center';
     modal.style.alignItems = 'center';
     modal.style.zIndex = '99999';
-    modal.style.padding = '10px';
-
-    const titleEl = document.createElement('h2');
-    titleEl.innerText = movieTitle;
-    titleEl.style.color = '#ff0055';
-    titleEl.style.fontSize = '1.2rem';
-    titleEl.style.marginBottom = '10px';
-    titleEl.style.textAlign = 'center';
 
     const iframe = document.createElement('iframe');
     iframe.src = `https://vidsrc.me/embed/movie?tmdb=${movieId}`;
     iframe.style.width = '100%';
-    iframe.style.maxWidth = '850px';
-    iframe.style.height = '60vh';
-    iframe.style.border = '2px solid #333';
-    iframe.style.borderRadius = '8px';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
     iframe.allowFullscreen = true;
-
-    const actionbar = document.createElement('div');
-    actionbar.style.display = 'flex';
-    actionbar.style.gap = '15px';
-    actionbar.style.marginTop = '15px';
-    actionbar.style.flexWrap = 'wrap';
-    actionbar.style.justifyContent = 'center';
-
-    const downloadBtn = document.createElement('a');
-    downloadBtn.innerText = '📥 FAST DIRECT DOWNLOAD';
-    downloadBtn.href = `https://archive.org/search.php?query=${encodeURIComponent(movieTitle)}`;
-    downloadBtn.target = '_blank';
-    downloadBtn.style.padding = '12px 20px';
-    downloadBtn.style.fontSize = '15px';
-    downloadBtn.style.color = 'white';
-    downloadBtn.style.backgroundColor = '#00cc44';
-    downloadBtn.style.textDecoration = 'none';
-    downloadBtn.style.borderRadius = '8px';
-    downloadBtn.style.fontWeight = 'bold';
+    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
 
     const closeBtn = document.createElement('button');
-    closeBtn.innerText = '✕ CLOSE';
-    closeBtn.style.padding = '12px 20px';
-    closeBtn.style.fontSize = '15px';
+    closeBtn.innerText = '✕';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '15px';
+    closeBtn.style.right = '15px';
+    closeBtn.style.zIndex = '100000';
+    closeBtn.style.padding = '8px 12px';
+    closeBtn.style.fontSize = '16px';
     closeBtn.style.color = 'white';
-    closeBtn.style.backgroundColor = '#ff3333';
-    closeBtn.style.border = 'none';
-    closeBtn.style.borderRadius = '8px';
+    closeBtn.style.backgroundColor = 'rgba(0,0,0,0.6)';
+    closeBtn.style.border = '1px solid rgba(255,255,255,0.3)';
+    closeBtn.style.borderRadius = '50%';
     closeBtn.style.cursor = 'pointer';
-    closeBtn.style.fontWeight = 'bold';
-    closeBtn.addEventListener('click', () => document.body.removeChild(modal));
 
-    actionbar.appendChild(downloadBtn);
-    actionbar.appendChild(closeBtn);
+    closeBtn.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+        }
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock().catch(() => {});
+        }
+        document.body.removeChild(modal);
+    });
 
-    modal.appendChild(titleEl);
     modal.appendChild(iframe);
-    modal.appendChild(actionbar);
+    modal.appendChild(closeBtn);
     document.body.appendChild(modal);
+
+    // Request Fullscreen & Landscape Orientation on One Tap
+    if (modal.requestFullscreen) {
+        modal.requestFullscreen().catch(() => {});
+    } else if (modal.webkitRequestFullscreen) {
+        modal.webkitRequestFullscreen();
+    }
+
+    if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+    }
 }
 
 if (form) {
