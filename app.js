@@ -93,8 +93,8 @@ function openModal(movieId, movieTitle) {
 
     const downloadBtn = document.createElement('a');
     downloadBtn.innerText = 'DOWNLOAD MOVIE';
-    // Switched to vidsrc.xyz to completely bypass Cloudflare 522 blocks
-    downloadBtn.href = `https://vidsrc.xyz/embed/movie?tmdb=${movieId}`;
+    // Updated to use vidsrc.to which resolves cleanly without DNS errors
+    downloadBtn.href = `https://vidsrc.to/embed/movie/${movieId}`;
     downloadBtn.target = '_blank';
     downloadBtn.style.padding = '12px 24px';
     downloadBtn.style.fontSize = '16px';
