@@ -60,62 +60,57 @@ function openModal(movieId, movieTitle) {
     modal.style.position = 'fixed';
     modal.style.top = '0';
     modal.style.left = '0';
-    modal.style.width = '100%';
-    modal.style.height = '100%';
-    modal.style.backgroundColor = 'rgba(0,0,0,0.95)';
+    modal.style.width = '100vw';
+    modal.style.height = '100vh';
+    modal.style.backgroundColor = 'rgba(0,0,0,0.98)';
     modal.style.display = 'flex';
     modal.style.flexDirection = 'column';
     modal.style.justifyContent = 'center';
     modal.style.alignItems = 'center';
-    modal.style.zIndex = '9999';
+    modal.style.zIndex = '99999';
     modal.style.padding = '10px';
 
-    // Movie Title Header inside Modal
     const titleEl = document.createElement('h2');
     titleEl.innerText = movieTitle;
-    titleEl.style.color = '#fff';
-    titleEl.style.fontSize = '1.1rem';
-    titleEl.style.marginBottom = '8px';
+    titleEl.style.color = '#ff0055';
+    titleEl.style.fontSize = '1.2rem';
+    titleEl.style.marginBottom = '5px';
     titleEl.style.textAlign = 'center';
 
-    // Video Player Iframe
     const iframe = document.createElement('iframe');
     iframe.src = `https://vidsrc.me/embed/movie?tmdb=${movieId}`;
     iframe.style.width = '100%';
-    iframe.style.maxWidth = '900px';
-    iframe.style.height = '70vh';
-    iframe.style.border = 'none';
+    iframe.style.maxWidth = '850px';
+    iframe.style.height = '65vh';
+    iframe.style.border = '2px solid #333';
     iframe.style.borderRadius = '8px';
     iframe.allowFullscreen = true;
 
-    // Bottom Action Bar for Buttons
     const actionbar = document.createElement('div');
     actionbar.style.display = 'flex';
-    actionbar.style.gap = '15px';
-    actionbar.style.marginTop = '12px';
+    actionbar.style.gap = '20px';
+    actionbar.style.marginTop = '15px';
 
-    // Download Button
     const downloadBtn = document.createElement('a');
-    downloadBtn.innerText = '📥 Download Movie';
+    downloadBtn.innerText = 'DOWNLOAD MOVIE';
     downloadBtn.href = `https://vidsrc.cc/v2/embed/movie/${movieId}`;
     downloadBtn.target = '_blank';
-    downloadBtn.style.padding = '10px 20px';
-    downloadBtn.style.fontSize = '15px';
+    downloadBtn.style.padding = '12px 24px';
+    downloadBtn.style.fontSize = '16px';
     downloadBtn.style.color = 'white';
-    downloadBtn.style.backgroundColor = '#22c55e';
+    downloadBtn.style.backgroundColor = '#00cc44';
     downloadBtn.style.textDecoration = 'none';
-    downloadBtn.style.borderRadius = '6px';
+    downloadBtn.style.borderRadius = '8px';
     downloadBtn.style.fontWeight = 'bold';
 
-    // Close Button
     const closeBtn = document.createElement('button');
-    closeBtn.innerText = '❌ Close Player';
-    closeBtn.style.padding = '10px 20px';
-    closeBtn.style.fontSize = '15px';
+    closeBtn.innerText = 'CLOSE PLAYER';
+    closeBtn.style.padding = '12px 24px';
+    closeBtn.style.fontSize = '16px';
     closeBtn.style.color = 'white';
-    closeBtn.style.backgroundColor = '#ef4444';
+    closeBtn.style.backgroundColor = '#ff3333';
     closeBtn.style.border = 'none';
-    closeBtn.style.borderRadius = '6px';
+    closeBtn.style.borderRadius = '8px';
     closeBtn.style.cursor = 'pointer';
     closeBtn.style.fontWeight = 'bold';
     closeBtn.addEventListener('click', () => document.body.removeChild(modal));
