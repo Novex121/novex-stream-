@@ -93,8 +93,8 @@ function openModal(movieId, movieTitle) {
 
     const downloadBtn = document.createElement('a');
     downloadBtn.innerText = 'DOWNLOAD MOVIE';
-    // Switched from vidsrc.cc to embed.su mirror to bypass the 522 cloudflare down error
-    downloadBtn.href = `https://embed.su/embed/movie/${movieId}`;
+    // Switched to vidsrc.xyz to completely bypass Cloudflare 522 blocks
+    downloadBtn.href = `https://vidsrc.xyz/embed/movie?tmdb=${movieId}`;
     downloadBtn.target = '_blank';
     downloadBtn.style.padding = '12px 24px';
     downloadBtn.style.fontSize = '16px';
