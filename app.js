@@ -69,75 +69,59 @@ function openModal(movieId, movieTitle) {
     modal.style.alignItems = 'center';
     modal.style.zIndex = '99999';
     modal.style.padding = '10px';
-    modal.style.overflowY = 'auto';
 
     const titleEl = document.createElement('h2');
     titleEl.innerText = movieTitle;
     titleEl.style.color = '#ff0055';
     titleEl.style.fontSize = '1.2rem';
-    titleEl.style.marginBottom = '8px';
+    titleEl.style.marginBottom = '10px';
     titleEl.style.textAlign = 'center';
 
     const iframe = document.createElement('iframe');
     iframe.src = `https://vidsrc.me/embed/movie?tmdb=${movieId}`;
     iframe.style.width = '100%';
     iframe.style.maxWidth = '850px';
-    iframe.style.height = '55vh';
+    iframe.style.height = '60vh';
     iframe.style.border = '2px solid #333';
     iframe.style.borderRadius = '8px';
     iframe.allowFullscreen = true;
 
-    // Multi-Mirror Download Container
-    const downloadContainer = document.createElement('div');
-    downloadContainer.style.display = 'flex';
-    downloadContainer.flexWrap = 'wrap';
-    downloadContainer.style.gap = '10px';
-    downloadContainer.style.marginTop = '12px';
-    downloadContainer.style.justifyContent = 'center';
-    downloadContainer.style.width = '100%';
-    downloadContainer.style.maxWidth = '850px';
+    const actionbar = document.createElement('div');
+    actionbar.style.display = 'flex';
+    actionbar.style.gap = '15px';
+    actionbar.style.marginTop = '15px';
 
-    const mirrors = [
-        { name: '📥 Mirror 1 (VidSrc)', url: `https://vidsrc.me/embed/movie?tmdb=${movieId}` },
-        { name: '📥 Mirror 2 (MultiEmbed)', url: `https://multiembed.mov/?video_id=${movieId}&tmdb=1` },
-        { name: '📥 Mirror 3 (2Embed)', url: `https://www.2embed.cc/embed/${movieId}` }
-    ];
-
-    mirrors.forEach(mirror => {
-        const btn = document.createElement('a');
-        btn.innerText = mirror.name;
-        btn.href = mirror.url;
-        btn.target = '_blank';
-        btn.style.padding = '10px 16px';
-        btn.style.fontSize = '14px';
-        btn.style.color = 'white';
-        btn.style.backgroundColor = '#00cc44';
-        btn.style.textDecoration = 'none';
-        btn.style.borderRadius = '6px';
-        btn.style.fontWeight = 'bold';
-        btn.style.flex = '1';
-        btn.style.textAlign = 'center';
-        btn.style.minWidth = '140px';
-        downloadContainer.appendChild(btn);
-    });
+    // Direct download button linking to Internet Archive search query for the movie title
+    const downloadBtn = document.createElement('a');
+    downloadBtn.innerText = '📥 DOWNLOAD FILE (Archive.org)';
+    downloadBtn.href = `https://archive.org/search.php?query=${encodeURIComponent(movieTitle)}`;
+    downloadBtn.target = '_blank';
+    downloadBtn.style.padding = '12px 20px';
+    downloadBtn.style.fontSize = '15px';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.backgroundColor = '#00cc44';
+    downloadBtn.style.textDecoration = 'none';
+    downloadBtn.style.borderRadius = '8px';
+    downloadBtn.style.fontWeight = 'bold';
 
     const closeBtn = document.createElement('button');
-    closeBtn.innerText = '✕ CLOSE PLAYER';
-    closeBtn.style.marginTop = '12px';
-    closeBtn.style.padding = '10px 24px';
-    closeBtn.style.fontSize = '14px';
+    closeBtn.innerText = '✕ CLOSE';
+    closeBtn.style.padding = '12px 20px';
+    closeBtn.style.fontSize = '15px';
     closeBtn.style.color = 'white';
     closeBtn.style.backgroundColor = '#ff3333';
     closeBtn.style.border = 'none';
-    closeBtn.style.borderRadius = '6px';
+    closeBtn.style.borderRadius = '8px';
     closeBtn.style.cursor = 'pointer';
     closeBtn.style.fontWeight = 'bold';
     closeBtn.addEventListener('click', () => document.body.removeChild(modal));
 
+    actionbar.appendChild(downloadBtn);
+    actionbar.appendChild(closeBtn);
+
     modal.appendChild(titleEl);
     modal.appendChild(iframe);
-    modal.appendChild(downloadContainer);
-    modal.appendChild(closeBtn);
+    modal.appendChild(actionbar);
     document.body.appendChild(modal);
 }
 
