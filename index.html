@@ -4,66 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novex Stream</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #0d0f12; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 20px; }
-        header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 25px; }
-        h1 { font-size: 1.5rem; color: #ff4757; }
-        #searchInput { background: #1a1d24; border: 1px solid #333; color: #fff; padding: 10px 15px; border-radius: 6px; width: 100%; max-width: 300px; outline: none; }
-        .category-section { margin-bottom: 30px; }
-        .category-title { font-size: 1.2rem; margin-bottom: 15px; border-left: 4px solid #ff4757; padding-left: 10px; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .video-card { background: #1a1d24; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s ease; border: 1px solid #2a2d34; }
-        .video-card:hover { transform: translateY(-4px); }
-        .thumbnail-container { position: relative; width: 100%; height: 200px; background: #111; }
-        .thumbnail-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .card-info { padding: 10px; }
-        .card-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-rating { font-size: 0.7rem; background: #ff4757; color: #fff; padding: 2px 6px; border-radius: 4px; display: inline-block; }
-
-        /* Modal Styles */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
-        .modal-content { background: #14171d; width: 100%; max-width: 850px; border-radius: 10px; overflow: hidden; border: 1px solid #2e323b; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #1a1d24; gap: 10px; }
-        .header-actions { display: flex; gap: 8px; align-items: center; }
-        .quality-select { background: #2a2d34; color: #fff; border: 1px solid #444; padding: 6px 10px; border-radius: 4px; outline: none; }
-        .download-btn { background: #2ed573; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
-        .close-btn { background: #ff4757; color: #fff; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .video-wrapper { position: relative; width: 100%; background: #000; display: flex; justify-content: center; align-items: center; min-height: 250px; }
-        video { width: 100%; max-height: 70vh; display: block; background: #000; }
-        .player-error { display: none; color: #ff4757; padding: 20px; text-align: center; position: absolute; z-index: 10; font-size: 14px; background: rgba(20, 23, 29, 0.95); width: 100%; height: 100%; align-items: center; justify-content: center; flex-direction: column; }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#141414">
 </head>
 <body>
-
     <header>
-        <h1>Novex Stream</h1>
-        <input type="text" id="searchInput" placeholder="Search title..." oninput="filterVideos()">
+        <div class="logo-container">
+            <h1>NOVEX</h1>
+            <p>Trending Movies</p>
+        </div>
+        <form id="form">
+            <input type="text" id="search" placeholder="Search movies..." class="search">
+        </form>
     </header>
 
-    <main id="categoryContainer"></main>
-
-    <div id="playerModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="header-actions">
-                    <select id="qualitySelect" class="quality-select" onchange="changeVideoQuality()">
-                        <option value="720p">720p</option>
-                        <option value="480p">480p</option>
-                    </select>
-                    <button class="download-btn" onclick="downloadCurrentVideo()">⬇ Download</button>
-                </div>
-                <button class="close-btn" onclick="closePlayer()">✕ Close</button>
-            </div>
-            <div class="video-wrapper">
-                <div id="playerError" class="player-error">
-                    <strong>Playback Failed</strong>
-                    <span id="playerErrorDetails" style="color:#aaa; font-size:12px; margin-top:6px;">File missing or inaccessible in ./media/</span>
-                </div>
-                <video id="mp4Player" controls playsinline webkit-playsinline preload="metadata"></video>
-            </div>
-        </div>
-    </div>
+    <main id="main">
+    </main>
 
     <script src="app.js"></script>
 </body>
