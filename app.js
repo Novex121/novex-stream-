@@ -1,249 +1,52 @@
-let allCategoriesData = [];
-let currentVideoObj = null;
+// Step 1: Register at themoviedb.org to get an API key and paste it between the quotes.
+const API_KEY = ''; 
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadContent();
-    setupPlayerEventListeners();
-});
+// Backup Simulation Data (Ensures a 100% successful render even before you add the API Key)
+const DEMO_MOVIES = [
+  { id: 533535, title: "Deadpool & Wolverine", poster_path: "/8cdWjvZQUrmU655K0fU18X1c9kI.jpg" },
+  { id: 693134, title: "Dune: Part Two", poster_path: "/1pdfLvkbY9ohJlCjQH2TokxnuS9.jpg" },
+  { id: 823464, title: "Godzilla x Kong", poster_path: "/tMefVNw21p1OEID419DtickZEl2.jpg" },
+  { id: 1011985, title: "Kung Fu Panda 4", poster_path: "/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg" }
+];
 
-function setupPlayerEventListeners() {
-    const player = document.getElementById('mp4Player');
-    if (!player) return;
+async function loadLatestMovies() {
+  const container = document.getElementById('movieContainer');
+  
+  if (!API_KEY) {
+    console.log("Simulation Mode Active: API Key missing. Rendering backup catalog.");
+    renderMovies(DEMO_MOVIES, container);
+    return;
+  }
 
-    // Save progress to LocalStorage every time playback updates
-    player.addEventListener('timeupdate', () => {
-        if (currentVideoObj && player.currentTime > 0) {
-            localStorage.setItem(`progress_${currentVideoObj.title}`, player.currentTime.toString());
-        }
-    });
-
-    // Handle stream decoding and 404 missing file errors gracefully inside UI
-    player.addEventListener('error', () => {
-        const errorContainer = document.getElementById('playerError');
-        const details = document.getElementById('playerErrorDetails');
-        if (errorContainer && details && player.src) {
-            details.textContent = `Unable to load resource: ${player.src}`;
-            errorContainer.style.display = 'flex';
-        }
-    });
+  try {
+    const response = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`);
+    const data = await response.json();
+    renderMovies(data.results, container);
+  } catch (error) {
+    console.error("Fetch failed. Loading backup simulation.", error);
+    renderMovies(DEMO_MOVIES, container);
+  }
 }
 
-async function loadContent() {
-    const container = document.getElementById('categoryContainer');
-    if (!container) return;
-
-    container.innerHTML = '<p style="color:#888; text-align:center; padding:40px;">Loading catalog...</p>';
-
-    try {
-        const response = await fetch('videos.json');
-        if (!response.ok) {
-            throw new Error(`HTTP Error ${response.status}: Could not load videos.json`);
-        }
-
-        allCategoriesData = await response.json();
-
-        if (!Array.isArray(allCategoriesData) || allCategoriesData.length === 0) {
-            container.innerHTML = '<p style="color:#aaa; text-align:center; padding:40px;">No video categories available.</p>';
-            return;
-        }
-
-        renderCategories(allCategoriesData);
-    } catch (error) {
-        console.error("Load Error:", error);
-        container.innerHTML = `
-            <div style="color:#ff4757; text-align:center; padding:40px; background:#1a1d24; border-radius:8px; max-width:500px; margin:20px auto;">
-                <h3 style="margin-bottom:10px;">Failed to Load Catalog</h3>
-                <p style="color:#ccc; font-size:14px;">${error.message}</p>
-            </div>
-        `;
-    }
+function renderMovies(movies, container) {
+  container.innerHTML = movies.map(movie => `
+    <div class="movie-card" onclick="playMovie(${movie.id})">
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+      <p class="movie-title">${movie.title}</p>
+    </div>
+  `).join('');
 }
 
-function renderCategories(categories) {
-    const container = document.getElementById('categoryContainer');
-    if (!container) return;
-    container.innerHTML = '';
-
-    let renderedCount = 0;
-
-    categories.forEach(category => {
-        if (!category.videos || category.videos.length === 0) return;
-
-        renderedCount += category.videos.length;
-
-        const section = document.createElement('section');
-        section.className = 'category-section';
-
-        const title = document.createElement('h2');
-        title.className = 'category-title';
-        title.textContent = category.categoryTitle || 'Category';
-        section.appendChild(title);
-
-        const grid = document.createElement('div');
-        grid.className = 'video-grid';
-
-        category.videos.forEach(video => {
-            const card = document.createElement('div');
-            card.className = 'video-card';
-            card.onclick = () => openPlayer(video);
-
-            const thumbUrl = video.thumbnail || 'https://placehold.co/300x400/1a1d24/ffffff?text=No+Image';
-
-            card.innerHTML = `
-                <div class="thumbnail-container">
-                    <img src="${thumbUrl}" alt="${video.title}" loading="lazy">
-                </div>
-                <div class="card-info">
-                    <div class="card-title">${video.title || 'Untitled'}</div>
-                    <span class="card-rating">${video.rating || 'ALL'}</span>
-                </div>
-            `;
-
-            grid.appendChild(card);
-        });
-
-        section.appendChild(grid);
-        container.appendChild(section);
-    });
-
-    if (renderedCount === 0) {
-        container.innerHTML = '<p style="color:#aaa; text-align:center; padding:40px;">No matching videos found.</p>';
-    }
-}
-
-function openPlayer(video) {
-    currentVideoObj = video;
-    const modal = document.getElementById('playerModal');
-    const player = document.getElementById('mp4Player');
-    const qualitySelect = document.getElementById('qualitySelect');
-    const errorContainer = document.getElementById('playerError');
-
-    if (!modal || !player) return;
-
-    if (errorContainer) errorContainer.style.display = 'none';
-
-    let streamUrl = '';
-    if (video.versions) {
-        streamUrl = video.versions['720p'] || video.versions['480p'] || '';
-    } else if (video.url) {
-        streamUrl = video.url;
-    }
-
-    if (!streamUrl) {
-        alert("No stream URL available for this video.");
-        return;
-    }
-
-    if (qualitySelect) {
-        qualitySelect.value = video.versions && video.versions['720p'] ? '720p' : '480p';
-    }
-
-    modal.style.display = 'flex';
-
-    player.pause();
-    player.removeAttribute('src');
-    player.load();
-
-    player.src = streamUrl;
-    player.load();
-
-    // Resume saved playback position if existing
-    const savedTime = localStorage.getItem(`progress_${video.title}`);
-    if (savedTime) {
-        const timeVal = parseFloat(savedTime);
-        if (!isNaN(timeVal) && timeVal > 2) {
-            player.currentTime = timeVal;
-        }
-    }
-
-    const playPromise = player.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            console.log("Autoplay paused by mobile browser. Tap play on controls.");
-        });
-    }
+function playMovie(tmdbId) {
+  const iframe = document.getElementById('player');
+  iframe.src = `https://vidsrc.to/embed/movie/${tmdbId}`; 
+  document.getElementById('videoModal').style.display = 'flex';
 }
 
 function closePlayer() {
-    const modal = document.getElementById('playerModal');
-    const player = document.getElementById('mp4Player');
-    const errorContainer = document.getElementById('playerError');
-
-    if (player) {
-        player.pause();
-        player.removeAttribute('src');
-        player.load();
-    }
-
-    if (modal) modal.style.display = 'none';
-    if (errorContainer) errorContainer.style.display = 'none';
-
-    currentVideoObj = null;
+  const iframe = document.getElementById('player');
+  iframe.src = ''; // Stops playback immediately when closed
+  document.getElementById('videoModal').style.display = 'none';
 }
 
-function changeVideoQuality() {
-    const select = document.getElementById('qualitySelect');
-    const player = document.getElementById('mp4Player');
-
-    if (!select || !player || !currentVideoObj || !currentVideoObj.versions) return;
-
-    const selectedQuality = select.value;
-    const newUrl = currentVideoObj.versions[selectedQuality];
-
-    if (newUrl) {
-        const currentTime = player.currentTime;
-        const wasPlaying = !player.paused;
-
-        player.src = newUrl;
-        player.currentTime = currentTime;
-
-        if (wasPlaying) {
-            player.play().catch(() => {});
-        }
-    }
-}
-
-function downloadCurrentVideo() {
-    if (!currentVideoObj) return;
-
-    const select = document.getElementById('qualitySelect');
-    const quality = select ? select.value : '720p';
-
-    let streamUrl = '';
-    if (currentVideoObj.versions) {
-        streamUrl = currentVideoObj.versions[quality] || currentVideoObj.versions['720p'] || currentVideoObj.versions['480p'];
-    } else {
-        streamUrl = currentVideoObj.url;
-    }
-
-    if (!streamUrl) {
-        alert("No download file found.");
-        return;
-    }
-
-    const a = document.createElement('a');
-    a.href = streamUrl;
-    a.download = `${currentVideoObj.title || 'video'}.mp4`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-function filterVideos() {
-    const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
-
-    const query = searchInput.value.toLowerCase().trim();
-
-    if (!query) {
-        renderCategories(allCategoriesData);
-        return;
-    }
-
-    const filteredData = allCategoriesData.map(category => ({
-        categoryTitle: category.categoryTitle,
-        videos: category.videos.filter(v => v.title && v.title.toLowerCase().includes(query))
-    }));
-
-    renderCategories(filteredData);
-}
+document.addEventListener('DOMContentLoaded', loadLatestMovies);
