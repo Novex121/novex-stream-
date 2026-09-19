@@ -91,7 +91,6 @@ function openModal(movieId, movieTitle) {
     actionbar.style.gap = '15px';
     actionbar.style.marginTop = '15px';
 
-    // Direct download button linking to Internet Archive search query for the movie title
     const downloadBtn = document.createElement('a');
     downloadBtn.innerText = '📥 DOWNLOAD FILE (Archive.org)';
     downloadBtn.href = `https://archive.org/search.php?query=${encodeURIComponent(movieTitle)}`;
